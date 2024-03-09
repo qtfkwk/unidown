@@ -1,0 +1,13 @@
+[package]
+name = "unidown"
+version = "0.1.0"
+edition = "2021"
+description = "Convert Markdown to Unicode"
+repository = "https://github.com/qtfkwk/unidown"
+license = "MIT"
+
+[dependencies]
+clap = { version = "4.5.2", features = ["derive", "wrap_help"] }
+lazy_static = "1.4.0"
+pulldown-cmark = "0.10.0"
+pulldown-cmark-escape = "0.10.0"
