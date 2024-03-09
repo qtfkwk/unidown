@@ -63,7 +63,7 @@ Options:
 
 ```text
 $ unidown -V
-unidown 0.1.1
+unidown 0.2.0
 ```
 
 ```text
@@ -77,7 +77,8 @@ Here is some 𝘦𝘮𝘱𝘩𝘢𝘴𝘪𝘴, 𝐬𝐭𝐫𝐨𝐧𝐠, 𝒔�
 assert_eq!(
    unidown::convert("\
       Here is some *emphasis*, **strong**, ***strong emphasis***, ~~strike~~, \
-      and `code` text.\n\n   "),
+      and `code` text.\n\n\
+   "),
    "Here is some 𝘦𝘮𝘱𝘩𝘢𝘴𝘪𝘴, 𝐬𝐭𝐫𝐨𝐧𝐠, 𝒔𝒕𝒓𝒐𝒏𝒈 𝒆𝒎𝒑𝒉𝒂𝒔𝒊𝒔, s̶t̶r̶i̶k̶e̶, and 𝚌𝚘𝚍𝚎 text.\n\n",
 );
 ```
