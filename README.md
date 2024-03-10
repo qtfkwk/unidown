@@ -39,6 +39,10 @@ As a result, it normalizes:
    [Enclosed Alphanumerics] blocks, however your ability to *see* the effects depends on the
    specific applications (terminal, text editor, web browser, etc) you're using and their
    configurations (fonts, etc).
+   For instance, it's very probable that regular and monospace *look* identical in a terminal or
+   text editor, because the font *is* probably monospace.
+   If a non-monospace font is configured or another application is used that uses a non-monospace
+   font, or the output bytes are examined more closely, you will *see* the effect.
 
 3. This crate can be considered an improved version of the [`markdown2unicode`] crate but contains
    no copyrighted nor GPLv3 licensed code from its original upstream source ([USBashka]'s
@@ -56,6 +60,8 @@ Arguments:
   [STRING]...  Markdown string(s)
 
 Options:
+      --demo     Demo mode
+      --all      All mode
   -i <PATH>      Input file(s)
   -h, --help     Print help
   -V, --version  Print version
@@ -63,12 +69,52 @@ Options:
 
 ```text
 $ unidown -V
-unidown 0.2.0
+unidown 0.3.0
 ```
 
 ```text
 $ unidown 'Here is some *emphasis*, **strong**, ***strong emphasis***, ~~strike~~, and `code` text.'
 Here is some 𝘦𝘮𝘱𝘩𝘢𝘴𝘪𝘴, 𝐬𝐭𝐫𝐨𝐧𝐠, 𝒔𝒕𝒓𝒐𝒏𝒈 𝒆𝒎𝒑𝒉𝒂𝒔𝒊𝒔, s̶t̶r̶i̶k̶e̶, and 𝚌𝚘𝚍𝚎 text.
+```
+
+```text
+$ unidown --all 'Your text here'
+𝘠𝘰𝘶𝘳 𝘵𝘦𝘹𝘵 𝘩𝘦𝘳𝘦
+𝐘𝐨𝐮𝐫 𝐭𝐞𝐱𝐭 𝐡𝐞𝐫𝐞
+𝚈𝚘𝚞𝚛 𝚝𝚎𝚡𝚝 𝚑𝚎𝚛𝚎
+Y̶o̶u̶r̶ ̶t̶e̶x̶t̶ ̶h̶e̶r̶e̶
+𝒀𝒐𝒖𝒓 𝒕𝒆𝒙𝒕 𝒉𝒆𝒓𝒆
+𝒴ℴ𝓊𝓇 𝓉ℯ𝓍𝓉 𝒽ℯ𝓇ℯ
+𝓨𝓸𝓾𝓻 𝓽𝓮𝔁𝓽 𝓱𝓮𝓻𝓮
+Ⓨⓞⓤⓡ ⓣⓔⓧⓣ ⓗⓔⓡⓔ
+𝘠̶𝘰̶𝘶̶𝘳̶ ̶𝘵̶𝘦̶𝘹̶𝘵̶ ̶𝘩̶𝘦̶𝘳̶𝘦̶
+𝐘̶𝐨̶𝐮̶𝐫̶ ̶𝐭̶𝐞̶𝐱̶𝐭̶ ̶𝐡̶𝐞̶𝐫̶𝐞̶
+𝒀̶𝒐̶𝒖̶𝒓̶ ̶𝒕̶𝒆̶𝒙̶𝒕̶ ̶𝒉̶𝒆̶𝒓̶𝒆̶
+𝚈̶𝚘̶𝚞̶𝚛̶ ̶𝚝̶𝚎̶𝚡̶𝚝̶ ̶𝚑̶𝚎̶𝚛̶𝚎̶
+𝔜𝔬𝔲𝔯 𝔱𝔢𝔵𝔱 𝔥𝔢𝔯𝔢
+𝖄𝖔𝖚𝖗 𝖙𝖊𝖝𝖙 𝖍𝖊𝖗𝖊
+𝕐𝕠𝕦𝕣 𝕥𝕖𝕩𝕥 𝕙𝕖𝕣𝕖
+```
+
+```text
+$ unidown --demo 'Your text here'
+| Markdown                    | Input                            | Result         | Unicode                                        |
+|-----------------------------|----------------------------------|----------------|------------------------------------------------|
+| Emphasis                    | `` *Your text here* ``           | 𝘠𝘰𝘶𝘳 𝘵𝘦𝘹𝘵 𝘩𝘦𝘳𝘦 | Italic                                         |
+| Strong                      | `` **Your text here** ``         | 𝐘𝐨𝐮𝐫 𝐭𝐞𝐱𝐭 𝐡𝐞𝐫𝐞 | Bold                                           |
+| Code                        | `` `Your text here` ``           | 𝚈𝚘𝚞𝚛 𝚝𝚎𝚡𝚝 𝚑𝚎𝚛𝚎 | Monospace                                      |
+| Strike                      | `` ~~Your text here~~ ``         | Y̶o̶u̶r̶ ̶t̶e̶x̶t̶ ̶h̶e̶r̶e̶ | Combining long stroke overlay                  |
+| Emphasis strong             | `` ***Your text here*** ``       | 𝒀𝒐𝒖𝒓 𝒕𝒆𝒙𝒕 𝒉𝒆𝒓𝒆 | Bold italic                                    |
+| Emphasis code               | `` *`Your text here`* ``         | 𝒴ℴ𝓊𝓇 𝓉ℯ𝓍𝓉 𝒽ℯ𝓇ℯ | Script                                         |
+| Strong code                 | `` **`Your text here`** ``       | 𝓨𝓸𝓾𝓻 𝓽𝓮𝔁𝓽 𝓱𝓮𝓻𝓮 | Bold script                                    |
+| Emphasis strong code        | `` ***`Your text here`*** ``     | Ⓨⓞⓤⓡ ⓣⓔⓧⓣ ⓗⓔⓡⓔ | Circled                                        |
+| Strike emphasis             | `` ~~*Your text here*~~ ``       | 𝘠̶𝘰̶𝘶̶𝘳̶ ̶𝘵̶𝘦̶𝘹̶𝘵̶ ̶𝘩̶𝘦̶𝘳̶𝘦̶ | Italic with combining long stroke overlay      |
+| Strike strong               | `` ~~**Your text here**~~ ``     | 𝐘̶𝐨̶𝐮̶𝐫̶ ̶𝐭̶𝐞̶𝐱̶𝐭̶ ̶𝐡̶𝐞̶𝐫̶𝐞̶ | Bold with combining long stroke overlay        |
+| Strike emphasis strong      | `` ~~***Your text here***~~ ``   | 𝒀̶𝒐̶𝒖̶𝒓̶ ̶𝒕̶𝒆̶𝒙̶𝒕̶ ̶𝒉̶𝒆̶𝒓̶𝒆̶ | Bold italic with combining long stroke overlay |
+| Strike code                 | `` ~~`Your text here`~~ ``       | 𝚈̶𝚘̶𝚞̶𝚛̶ ̶𝚝̶𝚎̶𝚡̶𝚝̶ ̶𝚑̶𝚎̶𝚛̶𝚎̶ | Monospace with combining long stroke overlay   |
+| Strike emphasis code        | `` ~~*`Your text here`*~~ ``     | 𝔜𝔬𝔲𝔯 𝔱𝔢𝔵𝔱 𝔥𝔢𝔯𝔢 | Fraktur                                        |
+| Strike strong code          | `` ~~**`Your text here`**~~ ``   | 𝖄𝖔𝖚𝖗 𝖙𝖊𝖝𝖙 𝖍𝖊𝖗𝖊 | Bold fraktur                                   |
+| Strike emphasis strong code | `` ~~***`Your text here`***~~ `` | 𝕐𝕠𝕦𝕣 𝕥𝕖𝕩𝕥 𝕙𝕖𝕣𝕖 | Double-struck                                  |
 ```
 
 # Library

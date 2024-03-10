@@ -111,6 +111,7 @@ use std::{
     collections::HashMap,
     io::{self, Write},
 };
+use veg::Veg;
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -242,6 +243,148 @@ pub fn convert(s: &str) -> String {
         pulldown_cmark::Parser::new_ext(s, pulldown_cmark::Options::all()),
     );
     r
+}
+
+#[derive(Debug)]
+struct Row {
+    markdown: String,
+    input: String,
+    result: String,
+    unicode: String,
+}
+
+impl Row {
+    fn new(markdown: &str, input: &str, result: &str, unicode: &str) -> Box<Row> {
+        Box::new(Row {
+            markdown: markdown.to_string(),
+            input: input.to_string(),
+            result: result.to_string(),
+            unicode: unicode.to_string(),
+        })
+    }
+}
+
+impl veg::Table for Row {
+    fn row(&self) -> Vec<String> {
+        vec![
+            self.markdown.clone(),
+            self.input.clone(),
+            self.result.clone(),
+            self.unicode.clone(),
+        ]
+    }
+}
+
+/**
+Demo mode
+
+```
+assert_eq!(
+    unidown::demo("Your text here"),
+    "\
+        | Markdown                    | Input                            | Result         | Unicode                                        |\n\
+        |-----------------------------|----------------------------------|----------------|------------------------------------------------|\n\
+        | Emphasis                    | `` *Your text here* ``           | 𝘠𝘰𝘶𝘳 𝘵𝘦𝘹𝘵 𝘩𝘦𝘳𝘦 | Italic                                         |\n\
+        | Strong                      | `` **Your text here** ``         | 𝐘𝐨𝐮𝐫 𝐭𝐞𝐱𝐭 𝐡𝐞𝐫𝐞 | Bold                                           |\n\
+        | Code                        | `` `Your text here` ``           | 𝚈𝚘𝚞𝚛 𝚝𝚎𝚡𝚝 𝚑𝚎𝚛𝚎 | Monospace                                      |\n\
+        | Strike                      | `` ~~Your text here~~ ``         | Y̶o̶u̶r̶ ̶t̶e̶x̶t̶ ̶h̶e̶r̶e̶ | Combining long stroke overlay                  |\n\
+        | Emphasis strong             | `` ***Your text here*** ``       | 𝒀𝒐𝒖𝒓 𝒕𝒆𝒙𝒕 𝒉𝒆𝒓𝒆 | Bold italic                                    |\n\
+        | Emphasis code               | `` *`Your text here`* ``         | 𝒴ℴ𝓊𝓇 𝓉ℯ𝓍𝓉 𝒽ℯ𝓇ℯ | Script                                         |\n\
+        | Strong code                 | `` **`Your text here`** ``       | 𝓨𝓸𝓾𝓻 𝓽𝓮𝔁𝓽 𝓱𝓮𝓻𝓮 | Bold script                                    |\n\
+        | Emphasis strong code        | `` ***`Your text here`*** ``     | Ⓨⓞⓤⓡ ⓣⓔⓧⓣ ⓗⓔⓡⓔ | Circled                                        |\n\
+        | Strike emphasis             | `` ~~*Your text here*~~ ``       | 𝘠̶𝘰̶𝘶̶𝘳̶ ̶𝘵̶𝘦̶𝘹̶𝘵̶ ̶𝘩̶𝘦̶𝘳̶𝘦̶ | Italic with combining long stroke overlay      |\n\
+        | Strike strong               | `` ~~**Your text here**~~ ``     | 𝐘̶𝐨̶𝐮̶𝐫̶ ̶𝐭̶𝐞̶𝐱̶𝐭̶ ̶𝐡̶𝐞̶𝐫̶𝐞̶ | Bold with combining long stroke overlay        |\n\
+        | Strike emphasis strong      | `` ~~***Your text here***~~ ``   | 𝒀̶𝒐̶𝒖̶𝒓̶ ̶𝒕̶𝒆̶𝒙̶𝒕̶ ̶𝒉̶𝒆̶𝒓̶𝒆̶ | Bold italic with combining long stroke overlay |\n\
+        | Strike code                 | `` ~~`Your text here`~~ ``       | 𝚈̶𝚘̶𝚞̶𝚛̶ ̶𝚝̶𝚎̶𝚡̶𝚝̶ ̶𝚑̶𝚎̶𝚛̶𝚎̶ | Monospace with combining long stroke overlay   |\n\
+        | Strike emphasis code        | `` ~~*`Your text here`*~~ ``     | 𝔜𝔬𝔲𝔯 𝔱𝔢𝔵𝔱 𝔥𝔢𝔯𝔢 | Fraktur                                        |\n\
+        | Strike strong code          | `` ~~**`Your text here`**~~ ``   | 𝖄𝖔𝖚𝖗 𝖙𝖊𝖝𝖙 𝖍𝖊𝖗𝖊 | Bold fraktur                                   |\n\
+        | Strike emphasis strong code | `` ~~***`Your text here`***~~ `` | 𝕐𝕠𝕦𝕣 𝕥𝕖𝕩𝕥 𝕙𝕖𝕣𝕖 | Double-struck                                  |\n\
+    ",
+);
+```
+*/
+pub fn demo(s: &str) -> String {
+    let mut t = Veg::table("Markdown|Input|Result|Unicode\n-|-|-|-");
+    for (markdown, syntax, unicode) in [
+        ("Emphasis", "*", "Italic"),
+        ("Strong", "**", "Bold"),
+        ("Code", "`", "Monospace"),
+        ("Strike", "~~", "Combining long stroke overlay"),
+        ("Emphasis strong", "***", "Bold italic"),
+        ("Emphasis code", "*`", "Script"),
+        ("Strong code", "**`", "Bold script"),
+        ("Emphasis strong code", "***`", "Circled"),
+        (
+            "Strike emphasis",
+            "~~*",
+            "Italic with combining long stroke overlay",
+        ),
+        (
+            "Strike strong",
+            "~~**",
+            "Bold with combining long stroke overlay",
+        ),
+        (
+            "Strike emphasis strong",
+            "~~***",
+            "Bold italic with combining long stroke overlay",
+        ),
+        (
+            "Strike code",
+            "~~`",
+            "Monospace with combining long stroke overlay",
+        ),
+        ("Strike emphasis code", "~~*`", "Fraktur"),
+        ("Strike strong code", "~~**`", "Bold fraktur"),
+        ("Strike emphasis strong code", "~~***`", "Double-struck"),
+    ] {
+        let input = format!("{syntax}{s}{}", syntax.chars().rev().collect::<String>());
+        t.push(Row::new(
+            markdown,
+            &format!("`` {input} ``"),
+            &convert(&input).replace("\n\n", ""),
+            unicode,
+        ));
+    }
+    t.markdown().unwrap()
+}
+
+/**
+All mode
+
+```
+assert_eq!(
+    unidown::all("Text"),
+    "\
+        𝘛𝘦𝘹𝘵\n\
+        𝐓𝐞𝐱𝐭\n\
+        𝚃𝚎𝚡𝚝\n\
+        T̶e̶x̶t̶\n\
+        𝑻𝒆𝒙𝒕\n\
+        𝒯ℯ𝓍𝓉\n\
+        𝓣𝓮𝔁𝓽\n\
+        Ⓣⓔⓧⓣ\n\
+        𝘛̶𝘦̶𝘹̶𝘵̶\n\
+        𝐓̶𝐞̶𝐱̶𝐭̶\n\
+        𝑻̶𝒆̶𝒙̶𝒕̶\n\
+        𝚃̶𝚎̶𝚡̶𝚝̶\n\
+        𝔗𝔢𝔵𝔱\n\
+        𝕿𝖊𝖝𝖙\n\
+        𝕋𝕖𝕩𝕥\n\
+    ",
+);
+```
+*/
+pub fn all(s: &str) -> String {
+    [
+        "*", "**", "`", "~~", "***", "*`", "**`", "***`", "~~*", "~~**", "~~***", "~~`", "~~*`",
+        "~~**`", "~~***`",
+    ]
+    .iter()
+    .map(|a| {
+        convert(&format!("{a}{s}{}", a.chars().rev().collect::<String>())).replace("\n\n", "\n")
+    })
+    .collect()
 }
 
 /**

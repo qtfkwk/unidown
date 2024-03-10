@@ -39,6 +39,10 @@ As a result, it normalizes:
    [Enclosed Alphanumerics] blocks, however your ability to *see* the effects depends on the
    specific applications (terminal, text editor, web browser, etc) you're using and their
    configurations (fonts, etc).
+   For instance, it's very probable that regular and monospace *look* identical in a terminal or
+   text editor, because the font *is* probably monospace.
+   If a non-monospace font is configured or another application is used that uses a non-monospace
+   font, or the output bytes are examined more closely, you will *see* the effect.
 
 3. This crate can be considered an improved version of the [`markdown2unicode`] crate but contains
    no copyrighted nor GPLv3 licensed code from its original upstream source ([USBashka]'s
@@ -59,6 +63,16 @@ $ unidown -V
 ```text
 $ unidown 'Here is some *emphasis*, **strong**, ***strong emphasis***, ~~strike~~, and `code` text.'
 !run:../target/release/unidown 'Here is some *emphasis*, **strong**, ***strong emphasis***, ~~strike~~, and `code` text.' |perl -ne 'print unless /^$/'
+```
+
+```text
+$ unidown --all 'Your text here'
+!run:../target/release/unidown --all 'Your text here'
+```
+
+```text
+$ unidown --demo 'Your text here'
+!run:../target/release/unidown --demo 'Your text here'
 ```
 
 # Library

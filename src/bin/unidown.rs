@@ -4,6 +4,14 @@ use std::path::PathBuf;
 #[derive(Parser)]
 #[command(about, version, max_term_width = 80)]
 struct Cli {
+    /// Demo mode
+    #[arg(long)]
+    demo: bool,
+
+    /// All mode
+    #[arg(long)]
+    all: bool,
+
     /// Input file(s)
     #[arg(short, value_name = "PATH")]
     input_files: Vec<PathBuf>,
@@ -26,7 +34,16 @@ fn main() {
 
     // Process arguments
     for input in &cli.input_strings {
-        println!("{}", unidown::convert(input));
+        print!(
+            "{}",
+            if cli.demo {
+                unidown::demo(input)
+            } else if cli.all {
+                unidown::all(input)
+            } else {
+                unidown::convert(input)
+            }
+        );
     }
 
     // Process files
