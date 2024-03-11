@@ -3,23 +3,25 @@
 
 Convert Markdown to Unicode:
 
-* `*Emphasis*` => 𝘌𝘮𝘱𝘩𝘢𝘴𝘪𝘴
-* `**Strong**` => 𝐒𝐭𝐫𝐨𝐧𝐠
-* `` `Code` `` => 𝙲𝚘𝚍𝚎
-* `~~Strike~~` => S̶t̶r̶i̶k̶e̶
-* `***Emphasis strong***` => 𝑬𝒎𝒑𝒉𝒂𝒔𝒊𝒔 𝒔𝒕𝒓𝒐𝒏𝒈
-* `***Emphasis* strong**` => 𝑬𝒎𝒑𝒉𝒂𝒔𝒊𝒔 𝐬𝐭𝐫𝐨𝐧𝐠
-* `***Strong** emphasis*` => 𝑺𝒕𝒓𝒐𝒏𝒈 𝘦𝘮𝘱𝘩𝘢𝘴𝘪𝘴
-* `` *`Emphasis code`* `` => ℰ𝓂𝓅𝒽𝒶𝓈𝒾𝓈 𝒸ℴ𝒹ℯ
-* `` **`Strong code`** `` => 𝓢𝓽𝓻𝓸𝓷𝓰 𝓬𝓸𝓭𝓮
-* `` ***`Emphasis strong code`*** `` => Ⓔⓜⓟⓗⓐⓢⓘⓢ ⓢⓣⓡⓞⓝⓖ ⓒⓞⓓⓔ
-* `~~*Strike emphasis*~~` => 𝘚̶𝘵̶𝘳̶𝘪̶𝘬̶𝘦̶ ̶𝘦̶𝘮̶𝘱̶𝘩̶𝘢̶𝘴̶𝘪̶𝘴̶
-* `~~**Strike strong**~~` => 𝐒̶𝐭̶𝐫̶𝐢̶𝐤̶𝐞̶ ̶𝐬̶𝐭̶𝐫̶𝐨̶𝐧̶𝐠̶
-* `~~***Strike emphasis strong***~~` => 𝑺̶𝒕̶𝒓̶𝒊̶𝒌̶𝒆̶ ̶𝒆̶𝒎̶𝒑̶𝒉̶𝒂̶𝒔̶𝒊̶𝒔̶ ̶𝒔̶𝒕̶𝒓̶𝒐̶𝒏̶𝒈̶
-* `` ~~`Strike code`~~ `` => 𝚂̶𝚝̶𝚛̶𝚒̶𝚔̶𝚎̶ ̶𝚌̶𝚘̶𝚍̶𝚎̶
-* `` ~~*`Strike emphasis code`*~~ `` => 𝔖𝔱𝔯𝔦𝔨𝔢 𝔢𝔪𝔭𝔥𝔞𝔰𝔦𝔰 𝔠𝔬𝔡𝔢
-* `` ~~**`Strike strong code`**~~ `` => 𝕾𝖙𝖗𝖎𝖐𝖊 𝖘𝖙𝖗𝖔𝖓𝖌 𝖈𝖔𝖉𝖊
-* `` ~~***`Strike emphasis strong code`***~~ `` => 𝕊𝕥𝕣𝕚𝕜𝕖 𝕖𝕞𝕡𝕙𝕒𝕤𝕚𝕤 𝕤𝕥𝕣𝕠𝕟𝕘 𝕔𝕠𝕕𝕖
+| Input                                         | Result                      |
+|-----------------------------------------------|-----------------------------|
+| `` *Emphasis* ``                              | 𝘌𝘮𝘱𝘩𝘢𝘴𝘪𝘴                    |
+| `` **Strong** ``                              | 𝐒𝐭𝐫𝐨𝐧𝐠                      |
+| `` `Code` ``                                  | 𝙲𝚘𝚍𝚎                        |
+| `` ~~Strike~~ ``                              | S̶t̶r̶i̶k̶e̶                      |
+| `` ***Emphasis strong*** ``                   | 𝑬𝒎𝒑𝒉𝒂𝒔𝒊𝒔 𝒔𝒕𝒓𝒐𝒏𝒈             |
+| `` ***Emphasis* strong** ``                   | 𝑬𝒎𝒑𝒉𝒂𝒔𝒊𝒔 𝐬𝐭𝐫𝐨𝐧𝐠             |
+| `` ***Strong** emphasis* ``                   | 𝑺𝒕𝒓𝒐𝒏𝒈 𝘦𝘮𝘱𝘩𝘢𝘴𝘪𝘴             |
+| `` *`Emphasis code`* ``                       | ℰ𝓂𝓅𝒽𝒶𝓈𝒾𝓈 𝒸ℴ𝒹ℯ               |
+| `` **`Strong code`** ``                       | 𝓢𝓽𝓻𝓸𝓷𝓰 𝓬𝓸𝓭𝓮                 |
+| `` ***`Emphasis strong code`*** ``            | Ⓔⓜⓟⓗⓐⓢⓘⓢ ⓢⓣⓡⓞⓝⓖ ⓒⓞⓓⓔ        |
+| `` ~~*Strike emphasis*~~ ``                   | 𝘚̶𝘵̶𝘳̶𝘪̶𝘬̶𝘦̶ ̶𝘦̶𝘮̶𝘱̶𝘩̶𝘢̶𝘴̶𝘪̶𝘴̶             |
+| `` ~~**Strike strong**~~ ``                   | 𝐒̶𝐭̶𝐫̶𝐢̶𝐤̶𝐞̶ ̶𝐬̶𝐭̶𝐫̶𝐨̶𝐧̶𝐠̶               |
+| `` ~~***Strike emphasis strong***~~ ``        | 𝑺̶𝒕̶𝒓̶𝒊̶𝒌̶𝒆̶ ̶𝒆̶𝒎̶𝒑̶𝒉̶𝒂̶𝒔̶𝒊̶𝒔̶ ̶𝒔̶𝒕̶𝒓̶𝒐̶𝒏̶𝒈̶      |
+| `` ~~`Strike code`~~ ``                       | 𝚂̶𝚝̶𝚛̶𝚒̶𝚔̶𝚎̶ ̶𝚌̶𝚘̶𝚍̶𝚎̶                 |
+| `` ~~*`Strike emphasis code`*~~ ``            | 𝔖𝔱𝔯𝔦𝔨𝔢 𝔢𝔪𝔭𝔥𝔞𝔰𝔦𝔰 𝔠𝔬𝔡𝔢        |
+| `` ~~**`Strike strong code`**~~ ``            | 𝕾𝖙𝖗𝖎𝖐𝖊 𝖘𝖙𝖗𝖔𝖓𝖌 𝖈𝖔𝖉𝖊          |
+| `` ~~***`Strike emphasis strong code`***~~ `` | 𝕊𝕥𝕣𝕚𝕜𝕖 𝕖𝕞𝕡𝕙𝕒𝕤𝕚𝕤 𝕤𝕥𝕣𝕠𝕟𝕘 𝕔𝕠𝕕𝕖 |
 
 Uses [`pulldown-cmark`] and a modified version of its `push_html` to do *real* Markdown parsing and
 rendering.
@@ -102,6 +104,7 @@ assert_eq!(
 //--------------------------------------------------------------------------------------------------
 // Crates
 
+use clap::ValueEnum;
 use lazy_static::lazy_static;
 use pulldown_cmark::{Alignment, CowStr, Event, Event::*, HeadingLevel, Tag, TagEnd};
 use pulldown_cmark_escape::{
@@ -139,10 +142,8 @@ const DOUBLE: &str =
     "𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡!@#$%^&*()_-+=?/|'\"`";
 const CIRCLE: &str =
     "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪①②③④⑤⑥⑦⑧⑨!@#$%^&*()_-+=?/|'\"`";
-/*
-const PARENS: &str =
-    "🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵0⑴⑵⑶⑷⑸⑹⑺⑻⑼!@#$%^&*()_-+=?/|'\"`";
-*/
+// const PARENS: &str =
+//     "🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵0⑴⑵⑶⑷⑸⑹⑺⑻⑼!@#$%^&*()_-+=?/|'\"`";
 
 //--------------------------------------------------------------------------------------------------
 // Static
@@ -160,6 +161,7 @@ lazy_static! {
     static ref BOLD_FRAKTUR_I: HashMap<char, usize> = c2i(BOLD_FRAKTUR);
     static ref DOUBLE_I: HashMap<char, usize> = c2i(DOUBLE);
     static ref CIRCLE_I: HashMap<char, usize> = c2i(CIRCLE);
+    // static ref PARENS_I: HashMap<char, usize> = c2i(PARENS);
 
     // HashMap with char to index for all alphabets to convert any character to its index
     static ref ALL_I: HashMap<char, usize> = REGULAR_I
@@ -174,6 +176,7 @@ lazy_static! {
         .chain(BOLD_FRAKTUR_I.iter())
         .chain(DOUBLE_I.iter())
         .chain(CIRCLE_I.iter())
+        // .chain(PARENS_I.iter())
         .map(|(c, i)| (*c, *i))
         .collect();
 
@@ -189,6 +192,7 @@ lazy_static! {
     static ref BOLD_FRAKTUR_C: HashMap<usize, char> = i2c(BOLD_FRAKTUR);
     static ref DOUBLE_C: HashMap<usize, char> = i2c(DOUBLE);
     static ref CIRCLE_C: HashMap<usize, char> = i2c(CIRCLE);
+    // static ref PARENS_C: HashMap<usize, char> = i2c(PARENS);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -247,16 +251,14 @@ pub fn convert(s: &str) -> String {
 
 #[derive(Debug)]
 struct Row {
-    markdown: String,
     input: String,
     result: String,
     unicode: String,
 }
 
 impl Row {
-    fn new(markdown: &str, input: &str, result: &str, unicode: &str) -> Box<Row> {
+    fn new(input: &str, result: &str, unicode: &str) -> Box<Row> {
         Box::new(Row {
-            markdown: markdown.to_string(),
             input: input.to_string(),
             result: result.to_string(),
             unicode: unicode.to_string(),
@@ -267,7 +269,6 @@ impl Row {
 impl veg::Table for Row {
     fn row(&self) -> Vec<String> {
         vec![
-            self.markdown.clone(),
             self.input.clone(),
             self.result.clone(),
             self.unicode.clone(),
@@ -282,71 +283,54 @@ Demo mode
 assert_eq!(
     unidown::demo("Your text here"),
     "\
-        | Markdown                    | Input                            | Result         | Unicode                                        |\n\
-        |-----------------------------|----------------------------------|----------------|------------------------------------------------|\n\
-        | Emphasis                    | `` *Your text here* ``           | 𝘠𝘰𝘶𝘳 𝘵𝘦𝘹𝘵 𝘩𝘦𝘳𝘦 | Italic                                         |\n\
-        | Strong                      | `` **Your text here** ``         | 𝐘𝐨𝐮𝐫 𝐭𝐞𝐱𝐭 𝐡𝐞𝐫𝐞 | Bold                                           |\n\
-        | Code                        | `` `Your text here` ``           | 𝚈𝚘𝚞𝚛 𝚝𝚎𝚡𝚝 𝚑𝚎𝚛𝚎 | Monospace                                      |\n\
-        | Strike                      | `` ~~Your text here~~ ``         | Y̶o̶u̶r̶ ̶t̶e̶x̶t̶ ̶h̶e̶r̶e̶ | Combining long stroke overlay                  |\n\
-        | Emphasis strong             | `` ***Your text here*** ``       | 𝒀𝒐𝒖𝒓 𝒕𝒆𝒙𝒕 𝒉𝒆𝒓𝒆 | Bold italic                                    |\n\
-        | Emphasis code               | `` *`Your text here`* ``         | 𝒴ℴ𝓊𝓇 𝓉ℯ𝓍𝓉 𝒽ℯ𝓇ℯ | Script                                         |\n\
-        | Strong code                 | `` **`Your text here`** ``       | 𝓨𝓸𝓾𝓻 𝓽𝓮𝔁𝓽 𝓱𝓮𝓻𝓮 | Bold script                                    |\n\
-        | Emphasis strong code        | `` ***`Your text here`*** ``     | Ⓨⓞⓤⓡ ⓣⓔⓧⓣ ⓗⓔⓡⓔ | Circled                                        |\n\
-        | Strike emphasis             | `` ~~*Your text here*~~ ``       | 𝘠̶𝘰̶𝘶̶𝘳̶ ̶𝘵̶𝘦̶𝘹̶𝘵̶ ̶𝘩̶𝘦̶𝘳̶𝘦̶ | Italic with combining long stroke overlay      |\n\
-        | Strike strong               | `` ~~**Your text here**~~ ``     | 𝐘̶𝐨̶𝐮̶𝐫̶ ̶𝐭̶𝐞̶𝐱̶𝐭̶ ̶𝐡̶𝐞̶𝐫̶𝐞̶ | Bold with combining long stroke overlay        |\n\
-        | Strike emphasis strong      | `` ~~***Your text here***~~ ``   | 𝒀̶𝒐̶𝒖̶𝒓̶ ̶𝒕̶𝒆̶𝒙̶𝒕̶ ̶𝒉̶𝒆̶𝒓̶𝒆̶ | Bold italic with combining long stroke overlay |\n\
-        | Strike code                 | `` ~~`Your text here`~~ ``       | 𝚈̶𝚘̶𝚞̶𝚛̶ ̶𝚝̶𝚎̶𝚡̶𝚝̶ ̶𝚑̶𝚎̶𝚛̶𝚎̶ | Monospace with combining long stroke overlay   |\n\
-        | Strike emphasis code        | `` ~~*`Your text here`*~~ ``     | 𝔜𝔬𝔲𝔯 𝔱𝔢𝔵𝔱 𝔥𝔢𝔯𝔢 | Fraktur                                        |\n\
-        | Strike strong code          | `` ~~**`Your text here`**~~ ``   | 𝖄𝖔𝖚𝖗 𝖙𝖊𝖝𝖙 𝖍𝖊𝖗𝖊 | Bold fraktur                                   |\n\
-        | Strike emphasis strong code | `` ~~***`Your text here`***~~ `` | 𝕐𝕠𝕦𝕣 𝕥𝕖𝕩𝕥 𝕙𝕖𝕣𝕖 | Double-struck                                  |\n\
+        | Input                            | Result         | Style              |\n\
+        |----------------------------------|----------------|--------------------|\n\
+        | `` *Your text here* ``           | 𝘠𝘰𝘶𝘳 𝘵𝘦𝘹𝘵 𝘩𝘦𝘳𝘦 | italic             |\n\
+        | `` **Your text here** ``         | 𝐘𝐨𝐮𝐫 𝐭𝐞𝐱𝐭 𝐡𝐞𝐫𝐞 | bold               |\n\
+        | `` `Your text here` ``           | 𝚈𝚘𝚞𝚛 𝚝𝚎𝚡𝚝 𝚑𝚎𝚛𝚎 | monospace          |\n\
+        | `` ~~Your text here~~ ``         | Y̶o̶u̶r̶ ̶t̶e̶x̶t̶ ̶h̶e̶r̶e̶ | strike             |\n\
+        | `` ***Your text here*** ``       | 𝒀𝒐𝒖𝒓 𝒕𝒆𝒙𝒕 𝒉𝒆𝒓𝒆 | bold-italic        |\n\
+        | `` *`Your text here`* ``         | 𝒴ℴ𝓊𝓇 𝓉ℯ𝓍𝓉 𝒽ℯ𝓇ℯ | script             |\n\
+        | `` **`Your text here`** ``       | 𝓨𝓸𝓾𝓻 𝓽𝓮𝔁𝓽 𝓱𝓮𝓻𝓮 | bold-script        |\n\
+        | `` ***`Your text here`*** ``     | Ⓨⓞⓤⓡ ⓣⓔⓧⓣ ⓗⓔⓡⓔ | circled            |\n\
+        | `` ~~*Your text here*~~ ``       | 𝘠̶𝘰̶𝘶̶𝘳̶ ̶𝘵̶𝘦̶𝘹̶𝘵̶ ̶𝘩̶𝘦̶𝘳̶𝘦̶ | strike-italic      |\n\
+        | `` ~~**Your text here**~~ ``     | 𝐘̶𝐨̶𝐮̶𝐫̶ ̶𝐭̶𝐞̶𝐱̶𝐭̶ ̶𝐡̶𝐞̶𝐫̶𝐞̶ | strike-bold        |\n\
+        | `` ~~***Your text here***~~ ``   | 𝒀̶𝒐̶𝒖̶𝒓̶ ̶𝒕̶𝒆̶𝒙̶𝒕̶ ̶𝒉̶𝒆̶𝒓̶𝒆̶ | strike-bold-italic |\n\
+        | `` ~~`Your text here`~~ ``       | 𝚈̶𝚘̶𝚞̶𝚛̶ ̶𝚝̶𝚎̶𝚡̶𝚝̶ ̶𝚑̶𝚎̶𝚛̶𝚎̶ | strike-monospace   |\n\
+        | `` ~~*`Your text here`*~~ ``     | 𝔜𝔬𝔲𝔯 𝔱𝔢𝔵𝔱 𝔥𝔢𝔯𝔢 | fraktur            |\n\
+        | `` ~~**`Your text here`**~~ ``   | 𝖄𝖔𝖚𝖗 𝖙𝖊𝖝𝖙 𝖍𝖊𝖗𝖊 | bold-fraktur       |\n\
+        | `` ~~***`Your text here`***~~ `` | 𝕐𝕠𝕦𝕣 𝕥𝕖𝕩𝕥 𝕙𝕖𝕣𝕖 | double-struck      |\n\n\
     ",
 );
 ```
 */
 pub fn demo(s: &str) -> String {
-    let mut t = Veg::table("Markdown|Input|Result|Unicode\n-|-|-|-");
-    for (markdown, syntax, unicode) in [
-        ("Emphasis", "*", "Italic"),
-        ("Strong", "**", "Bold"),
-        ("Code", "`", "Monospace"),
-        ("Strike", "~~", "Combining long stroke overlay"),
-        ("Emphasis strong", "***", "Bold italic"),
-        ("Emphasis code", "*`", "Script"),
-        ("Strong code", "**`", "Bold script"),
-        ("Emphasis strong code", "***`", "Circled"),
-        (
-            "Strike emphasis",
-            "~~*",
-            "Italic with combining long stroke overlay",
-        ),
-        (
-            "Strike strong",
-            "~~**",
-            "Bold with combining long stroke overlay",
-        ),
-        (
-            "Strike emphasis strong",
-            "~~***",
-            "Bold italic with combining long stroke overlay",
-        ),
-        (
-            "Strike code",
-            "~~`",
-            "Monospace with combining long stroke overlay",
-        ),
-        ("Strike emphasis code", "~~*`", "Fraktur"),
-        ("Strike strong code", "~~**`", "Bold fraktur"),
-        ("Strike emphasis strong code", "~~***`", "Double-struck"),
+    let mut t = Veg::table("Input|Result|Style\n-|-|-");
+    for (syntax, style) in [
+        ("*", "italic"),
+        ("**", "bold"),
+        ("`", "monospace"),
+        ("~~", "strike"),
+        ("***", "bold-italic"),
+        ("*`", "script"),
+        ("**`", "bold-script"),
+        ("***`", "circled"),
+        ("~~*", "strike-italic"),
+        ("~~**", "strike-bold"),
+        ("~~***", "strike-bold-italic"),
+        ("~~`", "strike-monospace"),
+        ("~~*`", "fraktur"),
+        ("~~**`", "bold-fraktur"),
+        ("~~***`", "double-struck"),
     ] {
         let input = format!("{syntax}{s}{}", syntax.chars().rev().collect::<String>());
         t.push(Row::new(
-            markdown,
             &format!("`` {input} ``"),
             &convert(&input).replace("\n\n", ""),
-            unicode,
+            style,
         ));
     }
-    t.markdown().unwrap()
+    format!("{}\n", t.markdown().unwrap())
 }
 
 /**
@@ -370,21 +354,24 @@ assert_eq!(
         𝚃̶𝚎̶𝚡̶𝚝̶\n\
         𝔗𝔢𝔵𝔱\n\
         𝕿𝖊𝖝𝖙\n\
-        𝕋𝕖𝕩𝕥\n\
+        𝕋𝕖𝕩𝕥\n\n\
     ",
 );
 ```
 */
 pub fn all(s: &str) -> String {
-    [
-        "*", "**", "`", "~~", "***", "*`", "**`", "***`", "~~*", "~~**", "~~***", "~~`", "~~*`",
-        "~~**`", "~~***`",
-    ]
-    .iter()
-    .map(|a| {
-        convert(&format!("{a}{s}{}", a.chars().rev().collect::<String>())).replace("\n\n", "\n")
-    })
-    .collect()
+    format!(
+        "{}\n",
+        [
+            "*", "**", "`", "~~", "***", "*`", "**`", "***`", "~~*", "~~**", "~~***", "~~`",
+            "~~*`", "~~**`", "~~***`",
+        ]
+        .iter()
+        .map(|a| {
+            convert(&format!("{a}{s}{}", a.chars().rev().collect::<String>())).replace("\n\n", "\n")
+        })
+        .collect::<String>()
+    )
 }
 
 /**
@@ -412,6 +399,68 @@ where
 
 //--------------------------------------------------------------------------------------------------
 // Structs and enums
+
+#[derive(Clone, ValueEnum)]
+pub enum Style {
+    Italic,
+    Bold,
+    Monospace,
+    Strike,
+    BoldItalic,
+    Script,
+    BoldScript,
+    Circled,
+    StrikeItalic,
+    StrikeBold,
+    StrikeBoldItalic,
+    StrikeMonospace,
+    Fraktur,
+    BoldFraktur,
+    DoubleStruck,
+    All,
+    Demo,
+}
+
+impl Style {
+    fn syntax(&self) -> (&str, &str) {
+        match self {
+            Style::Italic => ("*", "*"),
+            Style::Bold => ("**", "**"),
+            Style::Monospace => ("`", "`"),
+            Style::Strike => ("~~", "~~"),
+            Style::BoldItalic => ("***", "***"),
+            Style::Script => ("*`", "`*"),
+            Style::BoldScript => ("**`", "`**"),
+            Style::Circled => ("***`", "`***"),
+            Style::StrikeItalic => ("~~*", "*~~"),
+            Style::StrikeBold => ("~~**", "**~~"),
+            Style::StrikeBoldItalic => ("***~~", "***~~"),
+            Style::StrikeMonospace => ("~~`", "`~~"),
+            Style::Fraktur => ("~~*`", "`*~~"),
+            Style::BoldFraktur => ("~~**`", "`**~~"),
+            Style::DoubleStruck => ("~~***`", "`***~~"),
+            Style::All | Style::Demo => ("", ""),
+        }
+    }
+
+    /**
+    Convert text to Unicode style
+
+    ```
+    assert_eq!(unidown::Style::Fraktur.convert("Your text here"), "𝔜𝔬𝔲𝔯 𝔱𝔢𝔵𝔱 𝔥𝔢𝔯𝔢\n\n");
+    ```
+    */
+    pub fn convert(&self, s: &str) -> String {
+        match self {
+            Style::All => all(s),
+            Style::Demo => demo(s),
+            _ => {
+                let (a, b) = self.syntax();
+                convert(&format!("{a}{s}{b}"))
+            }
+        }
+    }
+}
 
 enum List {
     Ordered,

@@ -4,13 +4,9 @@ use std::path::PathBuf;
 #[derive(Parser)]
 #[command(about, version, max_term_width = 80)]
 struct Cli {
-    /// Demo mode
-    #[arg(long)]
-    demo: bool,
-
-    /// All mode
-    #[arg(long)]
-    all: bool,
+    /// Style
+    #[arg(short)]
+    style: Option<unidown::Style>,
 
     /// Input file(s)
     #[arg(short, value_name = "PATH")]
@@ -36,10 +32,8 @@ fn main() {
     for input in &cli.input_strings {
         print!(
             "{}",
-            if cli.demo {
-                unidown::demo(input)
-            } else if cli.all {
-                unidown::all(input)
+            if let Some(style) = &cli.style {
+                style.convert(input)
             } else {
                 unidown::convert(input)
             }
