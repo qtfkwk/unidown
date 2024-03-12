@@ -67,13 +67,14 @@ Options:
                   strike-bold, strike-bold-italic, strike-monospace, fraktur,
                   bold-fraktur, double-struck, all, demo]
   -i <PATH>       Input file(s)
+  -r              Print readme
   -h, --help      Print help
   -V, --version   Print version
 ```
 
 ```text
 $ unidown -V
-unidown 0.4.0
+unidown 0.5.0
 ```
 
 ```text

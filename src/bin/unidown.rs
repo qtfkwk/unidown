@@ -1,5 +1,11 @@
+use anyhow::Result;
 use clap::{CommandFactory, Parser};
 use std::path::PathBuf;
+
+#[cfg(unix)]
+use pager::Pager;
+
+const README: &str = include_str!("../../README.md");
 
 #[derive(Parser)]
 #[command(about, version, max_term_width = 80)]
@@ -12,20 +18,33 @@ struct Cli {
     #[arg(short, value_name = "PATH")]
     input_files: Vec<PathBuf>,
 
+    /// Print readme
+    #[arg(short)]
+    readme: bool,
+
     /// Markdown string(s)
     #[arg(value_name = "STRING")]
     input_strings: Vec<String>,
 }
 
-fn main() {
+fn main() -> Result<()> {
     let cli = Cli::parse();
+
+    // Print readme
+    if cli.readme {
+        #[cfg(unix)]
+        Pager::with_pager("bat -pl md").setup();
+
+        print!("{README}");
+        return Ok(());
+    }
 
     // Print help if no files or arguments
     if cli.input_strings.is_empty() && cli.input_files.is_empty() {
         let mut cmd = Cli::command();
         cmd.build();
         cmd.print_help().unwrap();
-        std::process::exit(0);
+        return Ok(());
     }
 
     // Process arguments
@@ -49,4 +68,6 @@ fn main() {
         };
         print!("{}", unidown::convert(&input));
     }
+
+    Ok(())
 }
