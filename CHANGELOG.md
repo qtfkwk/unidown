@@ -6,4 +6,5 @@
 * 0.4.0 (2024-03-10): Replace `--demo` and `--all` with `-s` option / `Style` enum; improve readme
   and demo
 * 0.5.0 (2024-03-11): Add `-r`
+* 0.6.0 (2024-07-30): Add `Makefile.md`; update dependencies
 

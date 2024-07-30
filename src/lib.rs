@@ -104,17 +104,18 @@ assert_eq!(
 //--------------------------------------------------------------------------------------------------
 // Crates
 
-use clap::ValueEnum;
-use lazy_static::lazy_static;
-use pulldown_cmark::{Alignment, CowStr, Event, Event::*, HeadingLevel, Tag, TagEnd};
-use pulldown_cmark_escape::{
-    escape_href, escape_html, escape_html_body_text, StrWrite, WriteWrapper,
+use {
+    clap::ValueEnum,
+    lazy_static::lazy_static,
+    pulldown_cmark::{
+        Alignment, CowStr, Event, Event::*, HeadingLevel, Options, Parser, Tag, TagEnd,
+    },
+    pulldown_cmark_escape::{
+        escape_href, escape_html, escape_html_body_text, FmtWriter, IoWriter, StrWrite,
+    },
+    std::{collections::HashMap, fmt, io},
+    veg::Veg,
 };
-use std::{
-    collections::HashMap,
-    io::{self, Write},
-};
-use veg::Veg;
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -235,6 +236,8 @@ for (markdown, unicode) in &[
     ("~~*`Strike emphasis code`*~~\n\n", "𝔖𝔱𝔯𝔦𝔨𝔢 𝔢𝔪𝔭𝔥𝔞𝔰𝔦𝔰 𝔠𝔬𝔡𝔢\n\n"),
     ("~~**`Strike strong code`**~~\n\n", "𝕾𝖙𝖗𝖎𝖐𝖊 𝖘𝖙𝖗𝖔𝖓𝖌 𝖈𝖔𝖉𝖊\n\n"),
     ("~~***`Strike emphasis strong code`***~~\n\n", "𝕊𝕥𝕣𝕚𝕜𝕖 𝕖𝕞𝕡𝕙𝕒𝕤𝕚𝕤 𝕤𝕥𝕣𝕠𝕟𝕘 𝕔𝕠𝕕𝕖\n\n"),
+    ("$f(x)=x^2$", "$f(x)=x^2$\n\n"),
+    ("$$f(x)=x^2$$", "$$f(x)=x^2$$\n\n"),
 ] {
     assert_eq!(unidown::convert(markdown), *unicode);
 }
@@ -242,10 +245,7 @@ for (markdown, unicode) in &[
 */
 pub fn convert(s: &str) -> String {
     let mut r = String::new();
-    push_unicode(
-        &mut r,
-        pulldown_cmark::Parser::new_ext(s, pulldown_cmark::Options::all()),
-    );
+    push_unicode(&mut r, Parser::new_ext(s, Options::all()));
     r
 }
 
@@ -380,21 +380,33 @@ Iterate over an [`Iterator`] of [`Event`]s, generate Unicode for each [`Event`],
 */
 pub fn push_unicode<'a, I>(s: &mut String, iter: I)
 where
-    I: Iterator<Item = pulldown_cmark::Event<'a>>,
+    I: Iterator<Item = Event<'a>>,
 {
-    UnicodeWriter::new(iter, s).run().unwrap();
+    write_unicode_fmt(s, iter).unwrap()
 }
 
 /**
 Iterate over an [`Iterator`] of [`Event`]s, generate Unicode for each [`Event`], and write it out to
-a writable stream.
+an I/O Stream.
 */
-pub fn write_unicode<'a, I, W>(writer: W, iter: I) -> io::Result<()>
+pub fn write_unicode_io<'a, I, W>(writer: W, iter: I) -> io::Result<()>
 where
     I: Iterator<Item = Event<'a>>,
-    W: Write,
+    W: io::Write,
 {
-    UnicodeWriter::new(iter, WriteWrapper(writer)).run()
+    UnicodeWriter::new(iter, IoWriter(writer)).run()
+}
+
+/**
+Iterate over an [`Iterator`] of [`Event`]s, generate Unicode for each [`Event`], and write it into
+Unicode-accepting buffer or stream.
+*/
+pub fn write_unicode_fmt<'a, I, W>(writer: W, iter: I) -> fmt::Result
+where
+    I: Iterator<Item = Event<'a>>,
+    W: fmt::Write,
+{
+    UnicodeWriter::new(iter, FmtWriter(writer)).run()
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -447,7 +459,10 @@ impl Style {
     Convert text to Unicode style
 
     ```
-    assert_eq!(unidown::Style::Fraktur.convert("Your text here"), "𝔜𝔬𝔲𝔯 𝔱𝔢𝔵𝔱 𝔥𝔢𝔯𝔢\n\n");
+    assert_eq!(
+        unidown::Style::Fraktur.convert("Your text here"),
+        "𝔜𝔬𝔲𝔯 𝔱𝔢𝔵𝔱 𝔥𝔢𝔯𝔢\n\n",
+    );
     ```
     */
     pub fn convert(&self, s: &str) -> String {
@@ -521,7 +536,7 @@ impl TableAlign {
     }
 }
 
-/// Port of `pulldown_cmark::html::HtmlWriter` that writes Unicode text instead of HTML
+/// Port of [`pulldown_cmark::html::HtmlWriter`] that writes Unicode text instead of HTML
 struct UnicodeWriter<'a, I, W> {
     /// Iterator supplying events.
     iter: I,
@@ -579,14 +594,15 @@ where
     }
 
     /// Writes a new line.
-    fn write_newline(&mut self) -> io::Result<()> {
+    #[inline]
+    fn write_newline(&mut self) -> Result<(), W::Error> {
         self.end_newline = true;
         self.writer.write_str("\n")
     }
 
     /// Writes a buffer, and tracks whether or not a newline was written.
     #[inline]
-    fn write(&mut self, s: &str) -> io::Result<()> {
+    fn write(&mut self, s: &str) -> Result<(), W::Error> {
         self.writer.write_str(s)?;
         if !s.is_empty() {
             self.end_newline = s.ends_with('\n');
@@ -594,7 +610,7 @@ where
         Ok(())
     }
 
-    fn run(mut self) -> io::Result<()> {
+    fn run(mut self) -> Result<(), W::Error> {
         while let Some(event) = self.iter.next() {
             match event {
                 Start(tag) => {
@@ -606,7 +622,7 @@ where
                 Text(text) => {
                     if !self.in_non_writing_block {
                         let mut t = String::new();
-                        escape_html_body_text(&mut t, &text)?;
+                        escape_html_body_text(&mut t, &text).expect("escape html body text: Text");
                         let alphabet: &HashMap<usize, char> = if self.strong && self.emphasis {
                             &BOLD_ITALIC_C
                         } else if self.strong {
@@ -633,7 +649,7 @@ where
                 }
                 Code(text) => {
                     let mut t = String::new();
-                    escape_html_body_text(&mut t, &text)?;
+                    escape_html_body_text(&mut t, &text).expect("escape html body text: Code");
                     let alphabet: &HashMap<usize, char> =
                         match (self.strike, self.emphasis, self.strong) {
                             (false, false, false) => &MONO_C,        // default
@@ -690,6 +706,16 @@ where
                 TaskListMarker(false) => {
                     self.write("* [ ] ")?;
                 }
+                InlineMath(text) => {
+                    self.write("$")?;
+                    escape_html(&mut self.writer, &text)?;
+                    self.write("$")?;
+                }
+                DisplayMath(text) => {
+                    self.write("$$")?;
+                    escape_html(&mut self.writer, &text)?;
+                    self.write("$$")?;
+                }
             }
         }
         if !self.end_newline {
@@ -699,7 +725,7 @@ where
     }
 
     /// Writes the start of an HTML tag.
-    fn start_tag(&mut self, tag: Tag<'a>) -> io::Result<()> {
+    fn start_tag(&mut self, tag: Tag<'a>) -> Result<(), W::Error> {
         match tag {
             Tag::HtmlBlock => Ok(()),
             Tag::Paragraph => {
@@ -758,7 +784,7 @@ where
                 }
                 Ok(())
             }
-            Tag::BlockQuote => {
+            Tag::BlockQuote(_kind) => {
                 if self.end_newline {
                     self.write("> ")
                 } else {
@@ -856,7 +882,7 @@ where
         }
     }
 
-    fn end_tag(&mut self, tag: TagEnd) -> io::Result<()> {
+    fn end_tag(&mut self, tag: TagEnd) -> Result<(), W::Error> {
         match tag {
             TagEnd::HtmlBlock => {}
             TagEnd::Paragraph => {
@@ -941,7 +967,7 @@ where
     }
 
     // run raw text, consuming end tag
-    fn raw_text(&mut self) -> io::Result<()> {
+    fn raw_text(&mut self) -> Result<(), W::Error> {
         let mut nest = 0;
         while let Some(event) = self.iter.next() {
             match event {
@@ -969,6 +995,16 @@ where
                 }
                 TaskListMarker(true) => self.write("[x]")?,
                 TaskListMarker(false) => self.write("[ ]")?,
+                InlineMath(text) => {
+                    self.write("$")?;
+                    escape_html(&mut self.writer, &text)?;
+                    self.write("$")?;
+                }
+                DisplayMath(text) => {
+                    self.write("$$")?;
+                    escape_html(&mut self.writer, &text)?;
+                    self.write("$$")?;
+                }
             }
         }
         Ok(())
