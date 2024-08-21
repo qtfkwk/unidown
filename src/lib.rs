@@ -623,14 +623,11 @@ where
                     if !self.in_non_writing_block {
                         let mut t = String::new();
                         escape_html_body_text(&mut t, &text).expect("escape html body text: Text");
-                        let alphabet: &HashMap<usize, char> = if self.strong && self.emphasis {
-                            &BOLD_ITALIC_C
-                        } else if self.strong {
-                            &BOLD_C
-                        } else if self.emphasis {
-                            &ITALIC_C
-                        } else {
-                            &REGULAR_C
+                        let alphabet: &HashMap<usize, char> = match (self.strong, self.emphasis) {
+                            (true, true) => &BOLD_ITALIC_C,
+                            (true, false) => &BOLD_C,
+                            (false, true) => &ITALIC_C,
+                            (false, false) => &REGULAR_C,
                         };
                         let u = t
                             .chars()
@@ -879,6 +876,9 @@ where
                 self.in_non_writing_block = true;
                 Ok(())
             }
+            Tag::DefinitionList | Tag::DefinitionListTitle | Tag::DefinitionListDefinition => {
+                Ok(())
+            }
         }
     }
 
@@ -921,7 +921,7 @@ where
                 }
                 self.table_cell_index += 1;
             }
-            TagEnd::BlockQuote => {
+            TagEnd::BlockQuote(_kind) => {
                 self.write("\n")?;
             }
             TagEnd::CodeBlock => {
@@ -962,6 +962,9 @@ where
             TagEnd::MetadataBlock(_) => {
                 self.in_non_writing_block = false;
             }
+            TagEnd::DefinitionList
+            | TagEnd::DefinitionListTitle
+            | TagEnd::DefinitionListDefinition => {}
         }
         Ok(())
     }
