@@ -11,4 +11,5 @@
 * 0.7.0 (2024-08-21): Convert alphabet selection into a truth table match; fix changelog; update dependencies
 * 0.8.0 (2024-10-24): Add clap color; update dependencies
     * 0.8.1 (2024-12-04): Update dependencies; add commit target to makefile
+    * 0.8.2 (2025-02-20): Update dependencies
 

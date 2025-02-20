@@ -876,9 +876,11 @@ where
                 self.in_non_writing_block = true;
                 Ok(())
             }
-            Tag::DefinitionList | Tag::DefinitionListTitle | Tag::DefinitionListDefinition => {
-                Ok(())
-            }
+            Tag::DefinitionList
+            | Tag::DefinitionListTitle
+            | Tag::DefinitionListDefinition
+            | Tag::Subscript
+            | Tag::Superscript => Ok(()),
         }
     }
 
@@ -964,7 +966,9 @@ where
             }
             TagEnd::DefinitionList
             | TagEnd::DefinitionListTitle
-            | TagEnd::DefinitionListDefinition => {}
+            | TagEnd::DefinitionListDefinition
+            | TagEnd::Subscript
+            | TagEnd::Superscript => {}
         }
         Ok(())
     }
