@@ -74,7 +74,7 @@ Options:
 
 ```text
 $ unidown -V
-unidown 0.8.2
+unidown 0.8.3
 ```
 
 ```text
