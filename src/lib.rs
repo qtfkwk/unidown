@@ -111,7 +111,7 @@ use {
         Alignment, CowStr, Event, Event::*, HeadingLevel, Options, Parser, Tag, TagEnd,
     },
     pulldown_cmark_escape::{
-        escape_href, escape_html, escape_html_body_text, FmtWriter, IoWriter, StrWrite,
+        FmtWriter, IoWriter, StrWrite, escape_href, escape_html, escape_html_body_text,
     },
     std::{collections::HashMap, fmt, io},
     veg::Veg,
