@@ -3,7 +3,7 @@ use clap::{CommandFactory, Parser, builder::Styles};
 use std::path::PathBuf;
 
 #[cfg(unix)]
-use pager::Pager;
+use pager2::Pager;
 
 const README: &str = include_str!("../../README.md");
 
