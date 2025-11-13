@@ -1,23 +1,16 @@
-use anyhow::Result;
-use clap::{CommandFactory, Parser, builder::Styles};
-use std::path::PathBuf;
+use {
+    clap::{CommandFactory, Parser},
+    clap_cargo::style::CLAP_STYLING,
+    std::path::PathBuf,
+};
 
 #[cfg(unix)]
 use pager2::Pager;
 
 const README: &str = include_str!("../../README.md");
 
-const STYLES: Styles = Styles::styled()
-    .header(clap_cargo::style::HEADER)
-    .usage(clap_cargo::style::USAGE)
-    .literal(clap_cargo::style::LITERAL)
-    .placeholder(clap_cargo::style::PLACEHOLDER)
-    .error(clap_cargo::style::ERROR)
-    .valid(clap_cargo::style::VALID)
-    .invalid(clap_cargo::style::INVALID);
-
 #[derive(Parser)]
-#[command(about, version, max_term_width = 80, styles = STYLES)]
+#[command(about, version, max_term_width = 80, styles = CLAP_STYLING)]
 struct Cli {
     /// Style
     #[arg(short)]
@@ -36,7 +29,7 @@ struct Cli {
     input_strings: Vec<String>,
 }
 
-fn main() -> Result<()> {
+fn main() {
     let cli = Cli::parse();
 
     // Print readme
@@ -45,7 +38,7 @@ fn main() -> Result<()> {
         Pager::with_pager("bat -pl md").setup();
 
         print!("{README}");
-        return Ok(());
+        return;
     }
 
     // Print help if no files or arguments
@@ -53,7 +46,7 @@ fn main() -> Result<()> {
         let mut cmd = Cli::command();
         cmd.build();
         cmd.print_help().unwrap();
-        return Ok(());
+        return;
     }
 
     // Process arguments
@@ -77,6 +70,4 @@ fn main() -> Result<()> {
         };
         print!("{}", unidown::convert(&input));
     }
-
-    Ok(())
 }

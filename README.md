@@ -62,19 +62,19 @@ Arguments:
   [STRING]...  Markdown string(s)
 
 Options:
-  -s <STYLE>      Style [possible values: italic, bold, monospace, strike,
-                  bold-italic, script, bold-script, circled, strike-italic,
-                  strike-bold, strike-bold-italic, strike-monospace, fraktur,
-                  bold-fraktur, double-struck, all, demo]
-  -i <PATH>       Input file(s)
-  -r              Print readme
-  -h, --help      Print help
-  -V, --version   Print version
+  -s <STYLE>     Style [possible values: italic, bold, monospace, strike,
+                 bold-italic, script, bold-script, circled, strike-italic,
+                 strike-bold, strike-bold-italic, strike-monospace, fraktur,
+                 bold-fraktur, double-struck, all, demo]
+  -i <PATH>      Input file(s)
+  -r             Print readme
+  -h, --help     Print help
+  -V, --version  Print version
 ```
 
 ```text
 $ unidown -V
-unidown 0.9.2
+unidown 0.9.3
 ```
 
 ```text

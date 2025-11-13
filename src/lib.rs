@@ -106,14 +106,18 @@ assert_eq!(
 
 use {
     clap::ValueEnum,
-    lazy_static::lazy_static,
     pulldown_cmark::{
-        Alignment, CowStr, Event, Event::*, HeadingLevel, Options, Parser, Tag, TagEnd,
+        Alignment, CowStr, Event,
+        Event::{
+            Code, DisplayMath, End, FootnoteReference, HardBreak, Html, InlineHtml, InlineMath,
+            Rule, SoftBreak, Start, TaskListMarker, Text,
+        },
+        HeadingLevel, Options, Parser, Tag, TagEnd,
     },
     pulldown_cmark_escape::{
         FmtWriter, IoWriter, StrWrite, escape_href, escape_html, escape_html_body_text,
     },
-    std::{collections::HashMap, fmt, io},
+    std::{collections::HashMap, fmt, io, sync::LazyLock},
     veg::Veg,
 };
 
@@ -149,23 +153,23 @@ const CIRCLE: &str =
 //--------------------------------------------------------------------------------------------------
 // Static
 
-lazy_static! {
-    // HashMaps with char to index in alphabet
-    static ref REGULAR_I: HashMap<char, usize> = c2i(REGULAR);
-    static ref BOLD_I: HashMap<char, usize> = c2i(BOLD);
-    static ref ITALIC_I: HashMap<char, usize> = c2i(ITALIC);
-    static ref BOLD_ITALIC_I: HashMap<char, usize> = c2i(BOLD_ITALIC);
-    static ref MONO_I: HashMap<char, usize> = c2i(MONO);
-    static ref CURSIVE_I: HashMap<char, usize> = c2i(CURSIVE);
-    static ref BOLD_CURSIVE_I: HashMap<char, usize> = c2i(BOLD_CURSIVE);
-    static ref FRAKTUR_I: HashMap<char, usize> = c2i(FRAKTUR);
-    static ref BOLD_FRAKTUR_I: HashMap<char, usize> = c2i(BOLD_FRAKTUR);
-    static ref DOUBLE_I: HashMap<char, usize> = c2i(DOUBLE);
-    static ref CIRCLE_I: HashMap<char, usize> = c2i(CIRCLE);
-    // static ref PARENS_I: HashMap<char, usize> = c2i(PARENS);
+// HashMaps with char to index in alphabet
+static REGULAR_I: LazyLock<HashMap<char, usize>> = LazyLock::new(|| c2i(REGULAR));
+static BOLD_I: LazyLock<HashMap<char, usize>> = LazyLock::new(|| c2i(BOLD));
+static ITALIC_I: LazyLock<HashMap<char, usize>> = LazyLock::new(|| c2i(ITALIC));
+static BOLD_ITALIC_I: LazyLock<HashMap<char, usize>> = LazyLock::new(|| c2i(BOLD_ITALIC));
+static MONO_I: LazyLock<HashMap<char, usize>> = LazyLock::new(|| c2i(MONO));
+static CURSIVE_I: LazyLock<HashMap<char, usize>> = LazyLock::new(|| c2i(CURSIVE));
+static BOLD_CURSIVE_I: LazyLock<HashMap<char, usize>> = LazyLock::new(|| c2i(BOLD_CURSIVE));
+static FRAKTUR_I: LazyLock<HashMap<char, usize>> = LazyLock::new(|| c2i(FRAKTUR));
+static BOLD_FRAKTUR_I: LazyLock<HashMap<char, usize>> = LazyLock::new(|| c2i(BOLD_FRAKTUR));
+static DOUBLE_I: LazyLock<HashMap<char, usize>> = LazyLock::new(|| c2i(DOUBLE));
+static CIRCLE_I: LazyLock<HashMap<char, usize>> = LazyLock::new(|| c2i(CIRCLE));
+// static PARENS_I: LazyLock<HashMap<char, usize>> = LazyLock::new(|| c2i(PARENS));
 
-    // HashMap with char to index for all alphabets to convert any character to its index
-    static ref ALL_I: HashMap<char, usize> = REGULAR_I
+// HashMap with char to index for all alphabets to convert any character to its index
+static ALL_I: LazyLock<HashMap<char, usize>> = LazyLock::new(|| {
+    REGULAR_I
         .iter()
         .chain(BOLD_I.iter())
         .chain(ITALIC_I.iter())
@@ -179,22 +183,22 @@ lazy_static! {
         .chain(CIRCLE_I.iter())
         // .chain(PARENS_I.iter())
         .map(|(c, i)| (*c, *i))
-        .collect();
+        .collect()
+});
 
-    // HashMaps with index to char
-    static ref REGULAR_C: HashMap<usize, char> = i2c(REGULAR);
-    static ref BOLD_C: HashMap<usize, char> = i2c(BOLD);
-    static ref ITALIC_C: HashMap<usize, char> = i2c(ITALIC);
-    static ref BOLD_ITALIC_C: HashMap<usize, char> = i2c(BOLD_ITALIC);
-    static ref MONO_C: HashMap<usize, char> = i2c(MONO);
-    static ref CURSIVE_C: HashMap<usize, char> = i2c(CURSIVE);
-    static ref BOLD_CURSIVE_C: HashMap<usize, char> = i2c(BOLD_CURSIVE);
-    static ref FRAKTUR_C: HashMap<usize, char> = i2c(FRAKTUR);
-    static ref BOLD_FRAKTUR_C: HashMap<usize, char> = i2c(BOLD_FRAKTUR);
-    static ref DOUBLE_C: HashMap<usize, char> = i2c(DOUBLE);
-    static ref CIRCLE_C: HashMap<usize, char> = i2c(CIRCLE);
-    // static ref PARENS_C: HashMap<usize, char> = i2c(PARENS);
-}
+// HashMaps with index to char
+static REGULAR_C: LazyLock<HashMap<usize, char>> = LazyLock::new(|| i2c(REGULAR));
+static BOLD_C: LazyLock<HashMap<usize, char>> = LazyLock::new(|| i2c(BOLD));
+static ITALIC_C: LazyLock<HashMap<usize, char>> = LazyLock::new(|| i2c(ITALIC));
+static BOLD_ITALIC_C: LazyLock<HashMap<usize, char>> = LazyLock::new(|| i2c(BOLD_ITALIC));
+static MONO_C: LazyLock<HashMap<usize, char>> = LazyLock::new(|| i2c(MONO));
+static CURSIVE_C: LazyLock<HashMap<usize, char>> = LazyLock::new(|| i2c(CURSIVE));
+static BOLD_CURSIVE_C: LazyLock<HashMap<usize, char>> = LazyLock::new(|| i2c(BOLD_CURSIVE));
+static FRAKTUR_C: LazyLock<HashMap<usize, char>> = LazyLock::new(|| i2c(FRAKTUR));
+static BOLD_FRAKTUR_C: LazyLock<HashMap<usize, char>> = LazyLock::new(|| i2c(BOLD_FRAKTUR));
+static DOUBLE_C: LazyLock<HashMap<usize, char>> = LazyLock::new(|| i2c(DOUBLE));
+static CIRCLE_C: LazyLock<HashMap<usize, char>> = LazyLock::new(|| i2c(CIRCLE));
+// static PARENS_C: LazyLock<HashMap<usize, char>> = LazyLock::new(|| i2c(PARENS));
 
 //--------------------------------------------------------------------------------------------------
 // Functions
@@ -243,6 +247,7 @@ for (markdown, unicode) in &[
 }
 ```
 */
+#[must_use]
 pub fn convert(s: &str) -> String {
     let mut r = String::new();
     push_unicode(&mut r, Parser::new_ext(s, Options::all()));
@@ -257,12 +262,12 @@ struct Row {
 }
 
 impl Row {
-    fn new(input: &str, result: &str, unicode: &str) -> Box<Row> {
-        Box::new(Row {
+    fn new(input: &str, result: &str, unicode: &str) -> Row {
+        Row {
             input: input.to_string(),
             result: result.to_string(),
             unicode: unicode.to_string(),
-        })
+        }
     }
 }
 
@@ -304,6 +309,8 @@ assert_eq!(
 );
 ```
 */
+#[allow(clippy::missing_panics_doc)]
+#[must_use]
 pub fn demo(s: &str) -> String {
     let mut t = Veg::table("Input|Result|Style\n-|-|-");
     for (syntax, style) in [
@@ -324,11 +331,11 @@ pub fn demo(s: &str) -> String {
         ("~~***`", "double-struck"),
     ] {
         let input = format!("{syntax}{s}{}", syntax.chars().rev().collect::<String>());
-        t.push(Row::new(
+        t.push(Box::new(Row::new(
             &format!("`` {input} ``"),
             &convert(&input).replace("\n\n", ""),
             style,
-        ));
+        )));
     }
     format!("{}\n", t.markdown().unwrap())
 }
@@ -359,6 +366,7 @@ assert_eq!(
 );
 ```
 */
+#[must_use]
 pub fn all(s: &str) -> String {
     format!(
         "{}\n",
@@ -377,17 +385,25 @@ pub fn all(s: &str) -> String {
 /**
 Iterate over an [`Iterator`] of [`Event`]s, generate Unicode for each [`Event`], and push it to a
 [`String`].
+
+# Panics
+
+Panics if not able to write to the given `&mut String`
 */
 pub fn push_unicode<'a, I>(s: &mut String, iter: I)
 where
     I: Iterator<Item = Event<'a>>,
 {
-    write_unicode_fmt(s, iter).unwrap()
+    write_unicode_fmt(s, iter).unwrap();
 }
 
 /**
 Iterate over an [`Iterator`] of [`Event`]s, generate Unicode for each [`Event`], and write it out to
 an I/O Stream.
+
+# Errors
+
+Returns an error if not able to write to the given writer
 */
 pub fn write_unicode_io<'a, I, W>(writer: W, iter: I) -> io::Result<()>
 where
@@ -400,6 +416,10 @@ where
 /**
 Iterate over an [`Iterator`] of [`Event`]s, generate Unicode for each [`Event`], and write it into
 Unicode-accepting buffer or stream.
+
+# Errors
+
+Returns an error if not able to write to the given writer
 */
 pub fn write_unicode_fmt<'a, I, W>(writer: W, iter: I) -> fmt::Result
 where
@@ -465,6 +485,7 @@ impl Style {
     );
     ```
     */
+    #[must_use]
     pub fn convert(&self, s: &str) -> String {
         match self {
             Style::All => all(s),
@@ -517,7 +538,7 @@ enum TableAlign {
 }
 
 impl TableAlign {
-    fn from(alignment: &Alignment) -> TableAlign {
+    fn from(alignment: Alignment) -> TableAlign {
         match alignment {
             Alignment::Left => TableAlign::Left,
             Alignment::Center => TableAlign::Center,
@@ -537,6 +558,7 @@ impl TableAlign {
 }
 
 /// Port of [`pulldown_cmark::html::HtmlWriter`] that writes Unicode text instead of HTML
+#[allow(clippy::struct_excessive_bools)]
 struct UnicodeWriter<'a, I, W> {
     /// Iterator supplying events.
     iter: I,
@@ -610,6 +632,7 @@ where
         Ok(())
     }
 
+    #[allow(clippy::too_many_lines)]
     fn run(mut self) -> Result<(), W::Error> {
         while let Some(event) = self.iter.next() {
             match event {
@@ -649,8 +672,7 @@ where
                     escape_html_body_text(&mut t, &text).expect("escape html body text: Code");
                     let alphabet: &HashMap<usize, char> =
                         match (self.strike, self.emphasis, self.strong) {
-                            (false, false, false) => &MONO_C,        // default
-                            (true, false, false) => &MONO_C,         // strike
+                            (_, false, false) => &MONO_C,            // strike
                             (false, false, true) => &BOLD_CURSIVE_C, // strong
                             (true, false, true) => &BOLD_FRAKTUR_C,  // strike strong
                             (false, true, false) => &CURSIVE_C,      // emphasis
@@ -693,7 +715,7 @@ where
                 FootnoteReference(name) => {
                     let len = self.numbers.len() + 1;
                     let number = *self.numbers.entry(name.clone()).or_insert(len);
-                    write!(&mut self.writer, "[{}][^", number)?;
+                    write!(&mut self.writer, "[{number}][^")?;
                     escape_html(&mut self.writer, &name)?;
                     self.write("]")?;
                 }
@@ -722,9 +744,9 @@ where
     }
 
     /// Writes the start of an HTML tag.
+    #[allow(clippy::too_many_lines)]
     fn start_tag(&mut self, tag: Tag<'a>) -> Result<(), W::Error> {
         match tag {
-            Tag::HtmlBlock => Ok(()),
             Tag::Paragraph => {
                 if self.end_newline {
                     Ok(())
@@ -771,14 +793,7 @@ where
                 Ok(())
             }
             Tag::TableCell => {
-                match self.table_state {
-                    TableState::Head => {
-                        self.write("| ")?;
-                    }
-                    TableState::Body => {
-                        self.write("| ")?;
-                    }
-                }
+                self.write("| ")?;
                 Ok(())
             }
             Tag::BlockQuote(_kind) => {
@@ -870,13 +885,14 @@ where
                 }
                 let len = self.numbers.len() + 1;
                 let number = *self.numbers.entry(name).or_insert(len);
-                write!(&mut self.writer, "{}. ", number)
+                write!(&mut self.writer, "{number}. ")
             }
             Tag::MetadataBlock(_) => {
                 self.in_non_writing_block = true;
                 Ok(())
             }
-            Tag::DefinitionList
+            Tag::HtmlBlock
+            | Tag::DefinitionList
             | Tag::DefinitionListTitle
             | Tag::DefinitionListDefinition
             | Tag::Subscript
@@ -886,7 +902,6 @@ where
 
     fn end_tag(&mut self, tag: TagEnd) -> Result<(), W::Error> {
         match tag {
-            TagEnd::HtmlBlock => {}
             TagEnd::Paragraph => {
                 self.write("\n\n")?;
             }
@@ -894,7 +909,11 @@ where
                 self.strong = false;
                 self.write("\n\n")?;
             }
-            TagEnd::Table => {
+            TagEnd::Table
+            | TagEnd::BlockQuote(_)
+            | TagEnd::List(_)
+            | TagEnd::Item
+            | TagEnd::FootnoteDefinition => {
                 self.write("\n")?;
             }
             TagEnd::TableHead => {
@@ -904,7 +923,7 @@ where
                     "|\n|{}|\n",
                     self.table_alignments
                         .iter()
-                        .map(|x| TableAlign::from(x).as_str().to_owned())
+                        .map(|x| TableAlign::from(*x).as_str().to_owned())
                         .collect::<Vec<String>>()
                         .join("|")
                 )?;
@@ -913,30 +932,11 @@ where
                 self.write("|\n")?;
             }
             TagEnd::TableCell => {
-                match self.table_state {
-                    TableState::Head => {
-                        self.write(" ")?;
-                    }
-                    TableState::Body => {
-                        self.write(" ")?;
-                    }
-                }
+                self.write(" ")?;
                 self.table_cell_index += 1;
-            }
-            TagEnd::BlockQuote(_kind) => {
-                self.write("\n")?;
             }
             TagEnd::CodeBlock => {
                 self.code = false;
-                self.write("\n")?;
-            }
-            TagEnd::List(true) => {
-                self.write("\n")?;
-            }
-            TagEnd::List(false) => {
-                self.write("\n")?;
-            }
-            TagEnd::Item => {
                 self.write("\n")?;
             }
             TagEnd::Emphasis => {
@@ -958,13 +958,11 @@ where
                 self.write("\"]")?;
             }
             TagEnd::Image => (), // shouldn't happen, handled in start
-            TagEnd::FootnoteDefinition => {
-                self.write("\n")?;
-            }
             TagEnd::MetadataBlock(_) => {
                 self.in_non_writing_block = false;
             }
-            TagEnd::DefinitionList
+            TagEnd::HtmlBlock
+            | TagEnd::DefinitionList
             | TagEnd::DefinitionListTitle
             | TagEnd::DefinitionListDefinition
             | TagEnd::Subscript
@@ -998,7 +996,7 @@ where
                 FootnoteReference(name) => {
                     let len = self.numbers.len() + 1;
                     let number = *self.numbers.entry(name).or_insert(len);
-                    write!(&mut self.writer, "[{}]", number)?;
+                    write!(&mut self.writer, "[{number}]")?;
                 }
                 TaskListMarker(true) => self.write("[x]")?,
                 TaskListMarker(false) => self.write("[ ]")?,
