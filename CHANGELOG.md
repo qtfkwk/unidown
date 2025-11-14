@@ -16,5 +16,6 @@
 * 0.9.0 (2025-08-28): Update dependencies; 2024 edition
     * 0.9.1 (2025-10-27): Update dependencies
     * 0.9.2 (2025-10-27): Use `pager2`
-    * 0.9.3 (2025-11-13): Update dependencies; use [`clap-cargo`] `CLAP_STYLING`; clippy fixes
+    * 0.9.3 (2025-11-13): Update dependencies; use [`clap-cargo`] `CLAP_STYLING`; add `clippy::pedantic` to `cargo clippy` command in the `clippy` target in the makefile; clippy fixes
+    * 0.9.4 (2025-11-14): Update dependencies; fix changelog
 
