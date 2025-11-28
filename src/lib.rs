@@ -720,10 +720,10 @@ where
                     self.write("]")?;
                 }
                 TaskListMarker(true) => {
-                    self.write("* [X] ")?;
+                    self.write("• [X] ")?;
                 }
                 TaskListMarker(false) => {
-                    self.write("* [ ] ")?;
+                    self.write("• [ ] ")?;
                 }
                 InlineMath(text) => {
                     self.write("$")?;
@@ -834,7 +834,7 @@ where
                         let n = self.ol.last_mut().unwrap().next();
                         write!(&mut self.writer, "{n}. ")
                     }
-                    List::Unordered => self.write("* "),
+                    List::Unordered => self.write("• "),
                 }
             }
             Tag::Emphasis => {
