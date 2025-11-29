@@ -1,13 +1,13 @@
 [package]
 name = "unidown"
-version = "0.9.4"
+version = "0.9.5"
 edition = "2024"
 description = "Convert Markdown to Unicode"
 repository = "https://github.com/qtfkwk/unidown"
 license = "MIT"
 
 [dependencies]
-clap = { version = "4.5.51", features = ["derive", "wrap_help"] }
+clap = { version = "4.5.53", features = ["derive", "wrap_help"] }
 clap-cargo = "0.18.3"
 pager2 = "0.6.3"
 pulldown-cmark = "0.13.0"
