@@ -19,4 +19,5 @@
     * 0.9.3 (2025-11-13): Update dependencies; use [`clap-cargo`] `CLAP_STYLING`; add `clippy::pedantic` to `cargo clippy` command in the `clippy` target in the makefile; clippy fixes
     * 0.9.4 (2025-11-14): Update dependencies; fix changelog
     * 0.9.5 (2025-11-29): Update dependencies; Use • instead of * for unordered (and TODO) lists https://github.com/qtfkwk/unidown/commit/f18a3a9e90dc76d963b7b4f3c8ecfdd5c6ba50e9 by @daniel-thompson
+    * 0.9.6 (2026-03-03): Update dependencies
 
